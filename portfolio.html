@@ -1043,8 +1043,9 @@ const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     console.log("Sending:", name, email, message); // Debug log
 
     const { data, error } = await supabase.from("contact_messages").insert([
-      { name, email, message }
-    ]);
+  { name, email, message, created_at: new Date().toISOString() }
+]);
+
 
     if (error) {
       console.error("Insert Error:", error);
