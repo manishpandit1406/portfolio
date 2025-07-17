@@ -921,16 +921,17 @@
         
     </section>
     <section id="contact">
-        <h2 class="section-title">Contact Us</h2>
-        <div class="card">
-            <form class="contact-form">
-                <input type="text" placeholder="Your Name" required />
-                <input type="email" placeholder="Your Email" required />
-                <textarea placeholder="Your Message" rows="4" required></textarea>
-                <button type="submit">Send Message</button>
-            </form>
-        </div>
-    </section>
+  <h2 class="section-title">Contact Us</h2>
+  <div class="card">
+    <form class="contact-form" id="contactForm">
+      <input type="text" id="name" placeholder="Your Name" required />
+      <input type="email" id="email" placeholder="Your Email" required />
+      <textarea id="message" placeholder="Your Message" rows="4" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+    <p id="status">send successfully</p>
+  </div>
+</section>
 
     <footer>
         <div class="social-links" >
@@ -1023,6 +1024,35 @@ skillItems.forEach(item => observer.observe(item));
     navLinks.classList.toggle('show');
   });
 
+
+
+ const SUPABASE_URL = 'https://xlmtgqjqqpdutybngxlp.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsbXRncWpxcXBkdXR5Ym5neGxwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3NTc0NDMsImV4cCI6MjA2ODMzMzQ0M30.rEqiAKCByQNJK3H0iRJdXzMHi7h1O1qaxSk4e5mD2UA';
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const form = document.getElementById('contactForm');
+  const statusText = document.getElementById('status');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    const { error } = await supabase.from('contact_messages').insert([
+      { name, email, message }
+    ]);
+
+    if (error) {
+      statusText.textContent = 'Error submitting form: ' + error.message;
+      statusText.style.color = 'red';
+    } else {
+      statusText.textContent = 'Message sent successfully!';
+      statusText.style.color = 'green';
+      form.reset();
+    }
+  });
 
     </script>
 </body>
