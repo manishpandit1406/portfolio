@@ -923,12 +923,12 @@
 <section id="contact">
   <h2>Contact Us</h2>
   <form id="contactForm">
-    <input type="text" id="name" placeholder="Your Name" required /><br>
-    <input type="email" id="email" placeholder="Your Email" required /><br>
-    <textarea id="message" placeholder="Your Message" rows="4" required></textarea><br>
-    <button type="submit">Send Message</button>
-  </form>
-  <p id="status"></p>
+  <input type="text" id="name" placeholder="Your Name" required /><br>
+  <input type="email" id="email" placeholder="Your Email" required /><br>
+  <textarea id="message" placeholder="Your Message" rows="4" required></textarea><br>
+  <button type="submit">Send Message</button>
+</form>
+<p id="status"></p>
 </section>
 
     <footer>
@@ -1028,24 +1028,28 @@ skillItems.forEach(item => observer.observe(item));
   const SUPABASE_URL = "https://xlmtgqjqqpdutybngxlp.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsbXRncWpxcXBkdXR5Ym5neGxwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3NTc0NDMsImV4cCI6MjA2ODMzMzQ0M30.rEqiAKCByQNJK3H0iRJdXzMHi7h1O1qaxSk4e5mD2UA";
 
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+ const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const form = document.getElementById("contactForm");
   const statusText = document.getElementById("status");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault(); // ✅ Prevent form from refreshing page
 
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const message = document.getElementById("message").value.trim();
 
-    console.log("Sending:", name, email, message); // Debug log
+    console.log("Sending:", name, email, message);
 
     const { data, error } = await supabase.from("contact_messages").insert([
-  { name, email, message, created_at: new Date().toISOString() }
-]);
-
+      {
+        name,
+        email,
+        message,
+        created_at: new Date().toISOString(), // or skip if default is set
+      }
+    ]);
 
     if (error) {
       console.error("Insert Error:", error);
